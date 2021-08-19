@@ -264,7 +264,7 @@ function filesArrays(){
 function filesArraysLinks(){ #Из строки (одной из папок темы) оздаются два массива: путь к файлу и цели, на которую он ссылается.
  if($1~/[]]$/){gsub("]","",$1)}
  if(tabledone==false){makeTable()} #создаём переменные из параметров для данной строки
- {thp=FILENAME;sub(/[^/]+$/, "", thp);pathToFiles=pathToTheme[FNUM] $1
+ {thp=FILENAME;sub(/[^/]+$/, "", thp);pathToFiles=pathToTheme[FNUM] $1 #thp -- путь к файлу темы
  #cmd = "ls -gGA "thp $1 " 2>/dev/null|awk '$7{printf \"%s\", $7; if($8){print \":\" $9}else{print \":\" $7}}'";
  cmd = "ls -gGA "thp $1 " 2>/dev/null|awk '$7{printf \"%s\", $7 \":"pathToFiles"/\" $7; if($8){print \":"pathToFiles"/\" $9}else{print \":" pathToFiles "/\" $7}}'";
  #print cmd
