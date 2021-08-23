@@ -42,7 +42,7 @@ When opening a single theme file it draws one table for all icons in context.<br
 
 # Other useful scripts for icon makers.
 ## [Icon Table](icontable.awk)
-**[ru] Таблица форматов значка виндоус.**
+**[ru] Таблица форматов значка виндоус.**<br>
 An AWK script, that opens MS Windows® *.ico* files as HTML-tables.<br>
 Needed "icoutils" package as dependency.<br>
 *Screenshot*<br>
@@ -97,7 +97,7 @@ Syntax:
 ```
 ./test-icon-theme.awk /path/to/theme1/index.theme ../../path/to/theme2/index.theme
 ```
-## [Link concentrator](lincentrator.sh)
+## [Link concentrator (lincentrator)](lincentrator.sh)
 Caja/Nautilus script. if you have many identical files with different names, and even soft links to them in one directory, and you need the original to be one, and the rest to be links to it, then this script is what you need! It finds all dupes (even soft links) in current directory by checksum. Select any **<u>different</u>** files or soft links in one directory, and apply this script.<br>P.S. All messages are currently in Russian.
 
 ## [Links in Neighbor Folders](link_in_nb_folders.sh)
