@@ -1,4 +1,4 @@
-# Icon Themes 2 HTML
+# Icon Themes 2 HTML (currently doesn't work! I wnat to rewrite it from beginning)
 
 **iconthemes2html_locale.awk is now required!**
 
