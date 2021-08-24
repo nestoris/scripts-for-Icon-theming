@@ -1,5 +1,17 @@
 # Scripts for icon themers
 
+## [Compair icon themes](compair-icon-themes.awk)
+**[ru] Новый скрипт для сравнения тем значков в виде HTML**<br>
+A new script for comparing/rendering icon themes as html-webpages, fully rewrited from zero (not completed yet), but it's about 10x faster then previous because of using gawk C-libraries instead of find/ls/bash commands.<br>
+Syntax:<br>
+```
+compair-icon-themes.awk /path/to/icontheme1/index.html /path/to/icontheme2/index.html > output.html
+```
+For now you need to edit manually an array of contexts in the script.<br>
+*Screenshot:*<br>
+![screen1](compair-icon-themes.png)<br>
+ 
+
 ## [Icon Table](icontable.awk)
 **[ru] Таблица форматов значка виндоус.**<br>
 An AWK script, that opens MS Windows® *.ico* files as HTML-tables.<br>
