@@ -13,7 +13,7 @@ close(extrcmd, "to")
 }
 
 function buildtable(name,folder){
-cmd="find "folder" -regextype sed -regex \".*/"name"_[0-9]*_.*\\.png\"";
+cmd="find \""folder"\" -regextype sed -regex \".*/"name"_[0-9]*_.*\\.png\"";
 while ((cmd|getline fnam)>0){
 #print fnam
 fattr=fnam;gsub(folder"/"name"_","",fattr);gsub(/.[^.]+$/,"",fattr)

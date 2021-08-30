@@ -108,7 +108,7 @@ if [ ! -z "$(find "$filhere" 2>/dev/null)" ];then #Если файл вообщ�
 if [[ "$allsums!" != *"$filsum"* ]];then
  make_orig
  link_dupes
- clone_script "$clone_postfix"
+# clone_script "$clone_postfix"
 else
  echo "$infile - файл(ы) с такой суммой уже есть в списке аргументов."
 fi
