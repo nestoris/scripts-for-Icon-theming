@@ -2,6 +2,7 @@
 
 ## [Compair icon themes](compair-icon-themes.awk)
 **[ru] Новый скрипт для сравнения тем значков в виде HTML**<br>
+[Screenshots of workflow (CLI and GUI)](screenshots_cit/README.md)<br>
 A new script for comparing/rendering icon themes as html-webpages, fully rewrited from zero (not completed yet), but it's about 10x faster then previous because of using gawk C-libraries instead of find/ls/bash commands.<br>
 Syntax:<br>
 ```
@@ -13,7 +14,6 @@ Currently output HTML files are not so pretty and beautiful. Maybe I'll add some
 **OH YES!!! There is no confirmation of file-overwriting yet! Be careful!!!**<br>
 *Screenshot:*<br>
 ![screen1](compair-icon-themes.png)<br>
-[Screenshots of workflow](screenshots_cit/README.md) (CLI and GUI)
  
 
 ## [Icon Table](icontable.awk)
