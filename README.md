@@ -10,7 +10,7 @@ compair-icon-themes.awk /path/to/icontheme1/index.html /path/to/icontheme2/index
 ```
 For now scripts runs correctly **only from terminal** and chooses front-end by this hierarchy: dialog -> Xdialog -> yad -> zenity -> kdialog. So if you have installed `dialog` utility (or no one from list above) it will run itself in terminal. Otherwise it will use GUI.<br>
 You can edit script manually and put your favorite FE name into quotes in the string: `#fe[1]=""` (and remove the '#' of course!) at the end of the `frontend_detect()` function.<br>
-Currently output HTML files are not so pretty and beautiful. Maybe I'll add some css and javascript to them, but I recommend the very lightest browsers to open them (not Virtual Machines as FireFox or Chrome)! The best are markdown viewer as **"ShowDown"**, and system help browser: **"Yelp"**.<br>
+Currently output HTML files are not so pretty and beautiful. Maybe I'll add some css and javascript to them, but I recommend the very lightest browsers to open them (not Virtual Machines as FireFox or Chrome)! The best are markdown viewer as **"ShowDown"**, and system help browser: **"Yelp"**. Because of many pictures on one page.<br>
 **OH YES!!! There is no confirmation of file-overwriting yet! Be careful!!!**<br>
 *Screenshot:*<br>
 ![screen1](compair-icon-themes.png)<br>
