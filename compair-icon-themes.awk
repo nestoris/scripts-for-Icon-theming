@@ -6,6 +6,114 @@
 
 #######################################################################################
 
+function printstyle(	style){
+style="\
+<style>\n\
+body {text-align:center; background-color:#3A6EA5;}\n\
+table { border: 1px outset #EDE8DF;background:#D4D0C8;}\n\
+table.description {border: 1px solid #333300;padding:6px;border-radius:4px;background:#FFFFE1;box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */}\n\
+table.description tr {border:none;background:#D4D0C8}\n\
+table.description td {padding:5px;border:none;background:#FFFFE1}\n\
+tr, td { border: 1px inset #EDE8DF; background:white; }\n\
+td.title { border: none; font-family: Sans; font-weight:500; background: -webkit-linear-gradient(left, #0A246A, #A6CAF0); /* Safari 5.1, iOS 5.0-6.1, Chrome 10-25, Android 4.0-4.3 */\n\
+background: -moz-linear-gradient(left, #0A246A, #A6CAF0); /* Firefox 3.6-15 */\n\
+background: -o-linear-gradient(left, #0A246A, #A6CAF0); /* Opera 11.1-12 */\n\
+background: linear-gradient(to right, #0A246A, #A6CAF0); /* Opera 15+, Chrome 25+, IE 10+, Firefox 16+, Safari 6.1+, iOS 7+, Android 4.4+ */ \n\
+color: white;\n\
+padding: 10;}\n\
+tr.cap td{border: 1px inset #EDE8DF;background-color:#D4D0C8;}\n\
+td.shortcut { background-color: #EDE8DF}\n\
+#title {height: 24px; font-size:19px; text-align:left; overflow:hidden;}\n\
+#icontbl{box-shadow: 0.4em 0.4em 15px rgba(0,0,0,0.3);}\n\
+#caption {text-shadow: 1px 1px 2px black, 0 0 1em #A6CAF0; font-size:39px; color:white; font-weight:bold; font-family:Sans,Sans-Serif,MS-Sans-Serif}\n\
+#tooltip {\n\
+  text-decoration:none;\n\
+  position:relative;\n\
+  margin-top:100;\n\
+}\n\
+.orig {\n\
+  text-decoration:none;\n\
+  position:relative;\n\
+  padding:4;\n\
+  margin-top:100;\n\
+  margin-left:100;\n\
+  -moz-border-radius:3px;\n\
+  -webkit-border-radius:3px;\n\
+  border-radius:3px;\n\
+  color:black;\n\
+  border:1px solid #EDE8DF;\n\
+}\n\
+.symlink {\n\
+  text-decoration:none;\n\
+  position:relative;\n\
+  padding:4;\n\
+  margin-top:100;\n\
+  margin-left:100;\n\
+  -moz-border-radius:3px;\n\
+  -webkit-border-radius:3px;\n\
+  border-radius:3px;\n\
+  color:black;\n\
+  border:1px solid #666666;\n\
+}\n\
+.none {\n\
+  text-decoration:none;\n\
+  position:relative;\n\
+  padding:0;\n\
+  margin-top:100;\n\
+  margin-left:100;\n\
+}\n\
+\n\
+#tooltip img {\n\
+  cursor:pointer;\n\
+}\n\
+\n\
+#tooltip span {\n\
+  display:none;\n\
+  margin:4px;\n\
+}\n\
+ \n\
+#tooltip span img {\n\
+  float:left;\n\
+  margin:0px 1px 1px 0;\n\
+}\n\
+#tooltip:hover span {\n\
+  position:absolute;\n\
+  display:block;\n\
+  width:auto;\n\
+  --max-width:220px;\n\
+  --min-height:128px;\n\
+  background-color:#FFEEAA;\n\
+  padding:0;\n\
+  margin-top:0;\n\
+  margin-left:0;\n\
+  -moz-border-radius:3px;\n\
+  -webkit-border-radius:3px;\n\
+  border-radius:3px;\n\
+  color:black;\n\
+  border:1px solid #AA3366;\n\
+  z-index:1000;\n\
+}\n\
+#tooltip span pre {\n\
+  position:absolute;\n\
+  display:block;\n\
+  width:auto;\n\
+  --max-width:220px;\n\
+  --min-height:128px;\n\
+  background-color:#FFEEAA;\n\
+  padding:0;\n\
+  margin-top:0;\n\
+  margin-left:0;\n\
+  -moz-border-radius:3px;\n\
+  -webkit-border-radius:3px;\n\
+  border-radius:3px;\n\
+  color:black;\n\
+  border:1px solid #AA3366;\n\
+  z-index:1000;\n\
+}\n\
+</style>"
+return style;
+}
+
 function warning(	text){
 system("zenity --warning --text="text)
 }
@@ -323,23 +431,25 @@ function allfolderslist(	th_arr,	cnt_arr,	i,	j,	k, abs,	filedata){ # th_arr[1]=/
 function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
  for(c in cnt_arr){
   outfile=outfolder?outfolder"/"cnt_arr[c]".html":"/dev/stdout"
-  print "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\" />\n<title>" title "</title>\n</head><body><center>" > outfile
+  print "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\" />\n<title>" title "</title>\n" > outfile
+  print printstyle() >> outfile
+  print "</head><body><center>" > outfile
   asort(iname_a[cnt_arr[c]])
-  print "<h1>"cnt_arr[c]"</h1>" > outfile
-  for(i in iname_a[cnt_arr[c]]){ # real count of icons in context
-  #for(i=1;i<5;i++){ # for testing of 5 icons
-   print "<table border=2><tr><td colspan=25>"iname_a[cnt_arr[c]][i]"</td></tr>" > outfile
-   print "<tr><td>theme\\type</td>" > outfile
+  print "<div id=caption>"cnt_arr[c]"</div>" > outfile # Header of context
+  #for(i in iname_a[cnt_arr[c]]){iconcount++ # real count of icons in context
+  for(i=600;i<1304;i++){ # for testing of 5 icons
+   print "<table id=icontbl border=1><tr><td colspan=25 class=\"title\">"iname_a[cnt_arr[c]][i]"</td></tr>" > outfile # icon name
+   print "<tr class=cap><td class=shortcut>theme\\type</td>" > outfile
    for(ty in type_a){
-    print "<td colspan="length(size_type_a[ty])">"ty"</td>" > outfile
+    print "<td colspan="length(size_type_a[ty])" class=shortcut>"ty"</td>" > outfile # types
    }
    print "</tr>" > outfile
    for(th in th_arr){
     gsub(/index\.theme$/,"",th_arr[th])
-    print "<tr><td>"thname_a[th_arr[th]]"</td>" > outfile
+    print "<tr><td><div id=\"tooltip\">"thname_a[th_arr[th]]"<span>"th_arr[th]"</span></div></td>" > outfile #theme name
     for(ty in type_a){
      #print prev_size[th_arr[th]]
-     for(s in size_type_a[ty]){
+     for(s in size_type_a[ty]){ # if there ARE icons of available sizes - draw them
       if(icon_a[th_arr[th]][cnt_arr[c]][ty][s][iname_a[cnt_arr[c]][i]]){
        outline=icon_a[th_arr[th]][cnt_arr[c]][ty][s][iname_a[cnt_arr[c]][i]]
        split(outline,outa,"|")
@@ -348,7 +458,7 @@ function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
        iconfile=outa[1] outa[2] "/" outa[3]
        iconsize=outa[6]*1
        filetype=outa[5]
-      }else{
+      }else{ # Draw pantoms
        outline=th_arr[th]"|"tolower(cnt_arr[c])"/"s"|"iname_a[cnt_arr[c]][i]"."(tolower(ty)=="scalable"?"svg":"png")"||n"
        split(outline,outa,"|")
        fls=prev_dir[outa[1]]
@@ -359,7 +469,13 @@ function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
        filetype=outa[5]
       }
       drawsize=iconsize<64?iconsize:64
-      print "<p><td style=\"background-color:"(outa[5]=="f"?"":(outa[5]=="l"?"#cccccc":"grey"))"\"><img src=\""iconfile"\" width=\""drawsize"\" height=\""drawsize"\" alt=\""(tolower(ty)=="scalable"?"scalable":iconsize)"\">""</td></p>" > outfile
+      #printalt="1"
+      if(filetype=="l"&&outa[4]~/\.\//){
+      bldrp="realpath -s "outa[1] outa[2] "/" outa[4]
+      while((bldrp|getline rlpath)>0);
+      close(bldrp)
+      }
+      print "<p><td style=\"background-color:"(outa[5]=="f"?"":(outa[5]=="l"?"#EDE8E0":"#D4D0C8"))"\"><div "(filetype=="n"?"class=\"none\"":filetype=="f"?"class=\"orig\"":"class=\"symlink\"")" id=\"tooltip\"><img src=\""iconfile"\" width=\""drawsize"\" height=\""drawsize"\" "(printalt?"alt=\""(tolower(ty)=="scalable"?"scalable":iconsize):"")"\"><span>"(tolower(ty)=="scalable"?"Scalable":s"x"s)"<br>"(outa[5]=="n"?"Missing":"Icon")":<pre>"iconfile"</pre>"(outa[5]=="l"?("<br><br>Link target:<pre>"rlpath"</pre>"):"")"</span></div></td></p>" > outfile
      }
     }
    }
@@ -367,6 +483,7 @@ function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
   print "</tr></table>" > outfile
  }
  print "</center></body>" > outfile
+ print "Total icons found in "cnt_arr[c]" context: "iconcount
 }
 
 
