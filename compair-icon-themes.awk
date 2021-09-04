@@ -114,6 +114,24 @@ td.shortcut { background-color: #EDE8DF}\n\
 return style;
 }
 
+function vallink(	path){
+ if(stat(path,stdata)<0){
+  exit -1
+ }
+ rela=gensub(/[^/]*$/,"",1,path)
+ result=stdata["linkval"]~/^\//?stdata["linkval"]:rela stdata["linkval"]
+ while(result~/\/\.\//){
+  gsub(/\/\.\//,"/",result)
+ }
+ gsub(/\/+/,"/",result)
+ gsub(/^\.\//,"",result)
+ while(result~/[^(\.\.)]\/\.\.\//){
+  gsub(/\/([^/.]*\/\.\.\/)+/,"/",result)
+ }
+ return result
+}
+
+
 function warning(	text){
 system("zenity --warning --text="text)
 }
@@ -399,13 +417,13 @@ function parsefast(	th_arr,	cmd,	th){ # parse icon themes array
  ORS=orstmp
 }
 
-function allfolderslist(	th_arr,	cnt_arr,	i,	j,	k, abs,	filedata){ # th_arr[1]=/path/to/index.theme => icon_a["/path/to/"]["Context"]["Type"]["Size"]["icon.ext"]="/path/to/|directory|fl"
- for(k in cnt_arr){
-  for(i in th_arr){
-   abs=gensub(/index.theme$/,"",1,th_arr[i])
+function allfolderslist(	th_arr,	cnt_arr,	i,	j,	k, abs,	filedata){ # th_arr[1]=/path/to/index.theme => icon_a["/path/to/"]["Context"]["Type"]["Size"]["icon.ext"]="/path/to/|directory|fl|size|fullinkpath"
+ for(k in cnt_arr){ # context in context array
+  for(i in th_arr){ # theme in themes array
+   abs=gensub(/index.theme$/,"",1,th_arr[i]) # get absolute path to theme folder
    #parsefast(th_arr[i])
-   for(j in folder_a[abs]){
-    if(context_fld[abs][j]==cnt_arr[k]){
+   for(j in folder_a[abs]){ # cycle in folders of this theme file
+    if(context_fld[abs][j]==cnt_arr[k]){ # if conext's name of folder equal to chosen context
       # print abs j, folder_a[abs][j], context_fld[abs][j], type_fld[abs][j], size_fld[abs][j]
       fstmp=FS
       FS="/"
@@ -413,12 +431,18 @@ function allfolderslist(	th_arr,	cnt_arr,	i,	j,	k, abs,	filedata){ # th_arr[1]=/
        if($3=="l"){
         stat((abs j "/" $2),filedata)
         linkval=filedata["linkval"]
+        linkpath=abs j "/" linkval
+         print linkpath
+        while(linkpath~/[^(\.\.)]\/\.\.\//){
+         gsub(/[^/]*\/\.\.\/)*/,"",linkpath)
+         #print linkpath
+        }
        }else{
         linkval=$2
        }
        noext=gensub(/.[^.]+$/,"",1,$2)
-       icon_a[abs][context_fld[abs][j]][type_fld[abs][j]][size_fld[abs][j]][noext]=abs"|"j"|"$2"|"linkval"|"$3"|"size_fld[abs][j]
-       iname_a[context_fld[abs][j]][noext]=noext
+       icon_a[abs][context_fld[abs][j]][type_fld[abs][j]][size_fld[abs][j]][noext]=abs"|"j"|"$2"|"linkval"|"$3"|"size_fld[abs][j]"|"linkpath # icon[themepath][folder][type][size][icon_name]=themepath|folder|icon_file|link_value|filetype|size (/path/to/theme/|apps/48|logical_name.ext|physical_name.ext|l|48)
+       iname_a[context_fld[abs][j]][noext]=noext # array[folder_of_theme][icon_name]=icon_name
       }
      }
      FS=fstmp
@@ -436,8 +460,8 @@ function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
   print "</head><body><center>" > outfile
   asort(iname_a[cnt_arr[c]])
   print "<div id=caption>"cnt_arr[c]"</div>" > outfile # Header of context
-  #for(i in iname_a[cnt_arr[c]]){iconcount++ # real count of icons in context
-  for(i=600;i<1304;i++){ # for testing of 5 icons
+  for(i in iname_a[cnt_arr[c]]){iconcount++ # real count of icons in context
+  #for(i=1;i<5;i++){ # for testing of 5 icons
    print "<table id=icontbl border=1><tr><td colspan=25 class=\"title\">"iname_a[cnt_arr[c]][i]"</td></tr>" > outfile # icon name
    print "<tr class=cap><td class=shortcut>theme\\type</td>" > outfile
    for(ty in type_a){
@@ -452,13 +476,14 @@ function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
      for(s in size_type_a[ty]){ # if there ARE icons of available sizes - draw them
       if(icon_a[th_arr[th]][cnt_arr[c]][ty][s][iname_a[cnt_arr[c]][i]]){
        outline=icon_a[th_arr[th]][cnt_arr[c]][ty][s][iname_a[cnt_arr[c]][i]]
+       delete outa
        split(outline,outa,"|")
        prev_dir[th_arr[th]]=outa[2]
        prev_size[th_arr[th]]=outa[6]
        iconfile=outa[1] outa[2] "/" outa[3]
        iconsize=outa[6]*1
        filetype=outa[5]
-      }else{ # Draw pantoms
+      }else{ # Draw phanthoms
        outline=th_arr[th]"|"tolower(cnt_arr[c])"/"s"|"iname_a[cnt_arr[c]][i]"."(tolower(ty)=="scalable"?"svg":"png")"||n"
        split(outline,outa,"|")
        fls=prev_dir[outa[1]]
@@ -470,12 +495,7 @@ function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
       }
       drawsize=iconsize<64?iconsize:64
       #printalt="1"
-      if(filetype=="l"&&outa[4]~/\.\//){
-      bldrp="realpath -s "outa[1] outa[2] "/" outa[4]
-      while((bldrp|getline rlpath)>0);
-      close(bldrp)
-      }
-      print "<p><td style=\"background-color:"(outa[5]=="f"?"":(outa[5]=="l"?"#EDE8E0":"#D4D0C8"))"\"><div "(filetype=="n"?"class=\"none\"":filetype=="f"?"class=\"orig\"":"class=\"symlink\"")" id=\"tooltip\"><img src=\""iconfile"\" width=\""drawsize"\" height=\""drawsize"\" "(printalt?"alt=\""(tolower(ty)=="scalable"?"scalable":iconsize):"")"\"><span>"(tolower(ty)=="scalable"?"Scalable":s"x"s)"<br>"(outa[5]=="n"?"Missing":"Icon")":<pre>"iconfile"</pre>"(outa[5]=="l"?("<br><br>Link target:<pre>"rlpath"</pre>"):"")"</span></div></td></p>" > outfile
+      print "<p><td style=\"background-color:"(outa[5]=="f"?"":(outa[5]=="l"?"#EDE8E0":"#D4D0C8"))"\"><div "(filetype=="n"?"class=\"none\"":filetype=="f"?"class=\"orig\"":"class=\"symlink\"")" id=\"tooltip\"><img src=\""iconfile"\" width=\""drawsize"\" height=\""drawsize"\" "(printalt?"alt=\""(tolower(ty)=="scalable"?"scalable":iconsize):"")"\"><span>"(tolower(ty)=="scalable"?"Scalable":s"x"s)"<br>"(outa[5]=="n"?"Missing":"Icon")":<pre>"iconfile"</pre>"(outa[5]=="l"?("<br><br>Link target:<pre>"outa[7]"</pre>"):"")"</span></div></td></p>" > outfile
      }
     }
    }
@@ -492,10 +512,10 @@ function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
 BEGIN{
 
  delete ARGV[0]
- asort(ARGV,filearr)
-#filearr[3]="/home/joker/Документы/GitHub/Win98SE/Icons/SE98/index.theme"
-#filearr[2]="/home/joker/Документы/GitHub/Chicago95/Icons/Chicago95/index.theme"
-#filearr[1]="/home/joker/Документы/icons/share-icons/mate/index.theme"
+# asort(ARGV,filearr)
+filearr[3]="/home/joker/Документы/GitHub/Win98SE/Icons/SE98/index.theme"
+filearr[2]="/home/joker/Документы/GitHub/Chicago95/Icons/Chicago95/index.theme"
+filearr[1]="/home/joker/Документы/icons/share-icons/mate/index.theme"
 #arraytree(ARGV,"ARGV")
 
 contarr[1]="Actions"
@@ -508,15 +528,16 @@ contarr[4]="MimeTypes"
 #ask(contarr,outarr)
 #arraytree(outarr,"outarr")
 
-parsefast(filearr)
-asorti(context_a,context_s)
-ask(context_s,cont_list)
-allfolderslist(filearr,cont_list)
-choosefolder("~")
-if(re_turn_v){
+parsefast(filearr) # быстрый разбор темы по параметрам, создание древовидных массивов
+asorti(context_a,context_s) # сортировка значков по алфавиту
+ask(context_s,cont_list) # запрос, какие контексты рендерить
+allfolderslist(filearr,cont_list) # создание массива значков со значениями, разделёнными символом "|"
+choosefolder("~") # выбор папки
+if(re_turn_v){ # если папка выбрана, то сохранять в неё
  outfolder=re_turn_v?re_turn_v:"~"
- draw(filearr,cont_list,outfolder)
+ draw(filearr,cont_list,outfolder) # рисовать html
 }
+#arraytree(icon_a,"icon_a")
 #asort(iname_a[cont_list[1]])
 #warning(cnt_arr[1])
 #arraytree(iname_a,"iname_a")
