@@ -510,33 +510,35 @@ function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
 #######################################################################################
 
 BEGIN{
-
  delete ARGV[0]
-# asort(ARGV,filearr)
-filearr[3]="/home/joker/Документы/GitHub/Win98SE/Icons/SE98/index.theme"
-filearr[2]="/home/joker/Документы/GitHub/Chicago95/Icons/Chicago95/index.theme"
-filearr[1]="/home/joker/Документы/icons/share-icons/mate/index.theme"
-#arraytree(ARGV,"ARGV")
-
-contarr[1]="Actions"
-contarr[2]="Places"
-contarr[3]="Devices"
-contarr[4]="MimeTypes"
+ if(ARGV[1]){
+  asort(ARGV,filearr)
+ }else{
+  filearr[3]="/home/joker/Документы/GitHub/Win98SE/Icons/SE98/index.theme"
+  filearr[2]="/home/joker/Документы/GitHub/Chicago95/Icons/Chicago95/index.theme"
+  filearr[1]="/home/joker/Документы/icons/share-icons/mate/index.theme"
+  #arraytree(ARGV,"ARGV")
+ }
+ contarr[1]="Actions"
+ contarr[2]="Places"
+ contarr[3]="Devices"
+ contarr[4]="MimeTypes"
 #contarr[5]="Animations"
 #contarr[6]="Status"
 
 #ask(contarr,outarr)
 #arraytree(outarr,"outarr")
 
-parsefast(filearr) # быстрый разбор темы по параметрам, создание древовидных массивов
-asorti(context_a,context_s) # сортировка значков по алфавиту
-ask(context_s,cont_list) # запрос, какие контексты рендерить
-allfolderslist(filearr,cont_list) # создание массива значков со значениями, разделёнными символом "|"
-choosefolder("~") # выбор папки
-if(re_turn_v){ # если папка выбрана, то сохранять в неё
- outfolder=re_turn_v?re_turn_v:"~"
- draw(filearr,cont_list,outfolder) # рисовать html
-}
+ parsefast(filearr) # быстрый разбор темы по параметрам, создание древовидных массивов
+ asorti(context_a,context_s) # сортировка значков по алфавиту
+ ask(context_s,cont_list) # запрос, какие контексты рендерить
+ allfolderslist(filearr,cont_list) # создание массива значков со значениями, разделёнными символом "|"
+ choosefolder("~") # выбор папки
+ if(re_turn_v){ # если папка выбрана, то сохранять в неё
+  outfolder=re_turn_v?re_turn_v:"~"
+  draw(filearr,cont_list,outfolder) # рисовать html
+ }
+
 #arraytree(icon_a,"icon_a")
 #asort(iname_a[cont_list[1]])
 #warning(cnt_arr[1])
