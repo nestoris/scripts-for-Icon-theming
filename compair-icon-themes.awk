@@ -250,7 +250,8 @@ function ask(	array,	arrout,	a,	maxlistlength,	tempfile,	cmd,	dargs,	yargs,	zarg
  #fe[1]=""
 
  if(fe[1]=="yad"){ # If Yet Another Dialog
-  yargs=" --width=\"500\" --height=\"300\" --list  --separator='' --multiple --column=\"Contexts\" --text=\"Hold 'Control' button for multiple selection.\""
+  "command -v yad"|getline yad
+  yargs=" --width=500 --height=300 --list  --separator='' --multiple --column=Contexts --text=\"Hold 'Control' button for multiple selection.\""
   for(a in array){
    yargs=yargs " \""array[a]"\""
   }
@@ -517,6 +518,7 @@ BEGIN{
   filearr[3]="/home/joker/Документы/GitHub/Win98SE/Icons/SE98/index.theme"
   filearr[2]="/home/joker/Документы/GitHub/Chicago95/Icons/Chicago95/index.theme"
   filearr[1]="/home/joker/Документы/icons/share-icons/mate/index.theme"
+  filearr[1]="/home/joker/Документы/icons/share-icons/Faenza/index.theme"
   #arraytree(ARGV,"ARGV")
  }
  contarr[1]="Actions"
@@ -531,6 +533,8 @@ BEGIN{
 
  parsefast(filearr) # быстрый разбор темы по параметрам, создание древовидных массивов
  asorti(context_a,context_s) # сортировка значков по алфавиту
+ asort(context_a,cnt_arr)
+ fe[1]="yad"
  ask(context_s,cont_list) # запрос, какие контексты рендерить
  allfolderslist(filearr,cont_list) # создание массива значков со значениями, разделёнными символом "|"
  choosefolder("~") # выбор папки
