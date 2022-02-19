@@ -1,5 +1,5 @@
 #!/usr/bin/gawk -f
-## IconTable Script for viewing and extract png-icons from Windows .ico files.
+## IconTable Script for viewing and extracting png-icons from Windows .ico files.
 ## Needed package "icoutils" installed as dependency.
 ## Change "browser" variable in BEGIN section from "yelp" to your favorite fast browser if you have it!
 
