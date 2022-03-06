@@ -1,7 +1,14 @@
 #!/usr/bin/gawk -f
 
-## 
+## Requirements:
+## gawk gawk-gd
 
+## Arch/Manjaro:
+# pacman -S gawk
+# yay -S gawk-gd
+
+## Other dists:
+# https://sourceforge.net/projects/gawkextlib/files/
 
 @load "filefuncs"
 @load "gd"
