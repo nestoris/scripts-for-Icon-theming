@@ -17,7 +17,7 @@
 @include "arraytree"
 
 function find(	path,	names, names_ar,
-				IMG_X,	IMG_Y){
+				IMG_X,	IMG_Y,	statdata,	fullpath){
 split(names,names_ar)
 for(n in names_ar){
 names_n[names_ar[n]]=names_ar[n]
@@ -30,12 +30,15 @@ while((getline < path)>0){
 #print path " " $2 " " $3
 
 fname=gensub(/\.[^.]*$/,"",1,$2)
-
+fullpath=path"/"$2
 if($3=="d" && $2!~/^\.+$/){
 find(path"/"$2,names)
 
 }else{
 if($3~/(f|l)/ && fname in names_n){
+
+if($3~/l/){stat(fullpath,statdata);fullpath=path"/"statdata["linkval"]}
+
 IMG_DST=gdImageCreateFromFile(path"/"$2)
 IMG_X=gdImageSX(IMG_DST)
 IMG_Y=gdImageSY(IMG_DST)
@@ -78,7 +81,7 @@ sizes_n[sizes_a[s]]=sizes_a[s]
 
 if(length(names_n)>1 && names in names_n){delete names_n[names]}
 
-print "*Built by [MDTable.awk](https://github.com/nestoris/scripts-for-Icon-theming/blob/main/icontable.awk)*\n" > outfile
+print "*Built by [MDTable.awk](https://github.com/nestoris/scripts-for-Icon-theming/blob/main/mdtable.awk)*\n" > outfile
 if(!ARGV[5]){printf "| " > outfile}
 for(s in sizes_a){
 printf "|**"sizes_a[s]"x"sizes_a[s]"**" > outfile
