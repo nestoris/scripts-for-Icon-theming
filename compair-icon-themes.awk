@@ -494,7 +494,7 @@ function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
        iconsize=s*1
        filetype=outa[5]
       }
-      drawsize=iconsize<64?iconsize:64
+      drawsize=iconsize<maxsize?iconsize:maxsize
       #printalt="1"
       print "<p><td style=\"background-color:"(outa[5]=="f"?"":(outa[5]=="l"?"#EDE8E0":"#D4D0C8"))"\"><div "(filetype=="n"?"class=\"none\"":filetype=="f"?"class=\"orig\"":"class=\"symlink\"")" id=\"tooltip\"><img src=\""iconfile"\" width=\""drawsize"\" height=\""drawsize"\" "(printalt?"alt=\""(tolower(ty)=="scalable"?"scalable":iconsize):"")"\"><span>"(tolower(ty)=="scalable"?"Scalable":s"x"s)"<br>"(outa[5]=="n"?"Missing":"Icon")":<pre>"iconfile"</pre>"(outa[5]=="l"?("<br><br>Link target:<pre>"outa[7]"</pre>"):"")"</span></div></td></p>" > outfile
      }
@@ -511,6 +511,7 @@ function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
 #######################################################################################
 
 BEGIN{
+ maxsize=128
  delete ARGV[0]
  if(ARGV[1]){
   asort(ARGV,filearr)
