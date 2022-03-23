@@ -191,5 +191,4 @@ tbl(nmz,szz)
 
 #find(".","computer.png",pwd)
 #find(pwd,"computer")
-
 }
