@@ -18,43 +18,43 @@
 
 function find(	path,	names, names_ar,
 				IMG_X,	IMG_Y,	statdata,	fullpath){
-split(names,names_ar)
-for(n in names_ar){
-names_n[names_ar[n]]=names_ar[n]
-}
+	split(names,names_ar)
+	for(n in names_ar){
+		names_n[names_ar[n]]=names_ar[n]
+	}
 
-fs=FS
-FS="/"
-while((getline < path)>0){
+	fs=FS
+	FS="/"
+	while((getline < path)>0){
 
-#print path " " $2 " " $3
+		#print path " " $2 " " $3
 
-fname=gensub(/\.[^.]*$/,"",1,$2)
-fullpath=path"/"$2
-if($3=="d" && $2!~/^\.+$/){
-find(path"/"$2,names)
+		fname=gensub(/\.[^.]*$/,"",1,$2)
+		fullpath=path"/"$2
+		if($3=="d" && $2!~/^\.+$/){
+			find(path"/"$2,names)
 
-}else{
-if($3~/(f|l)/ && fname in names_n){
+		}else{
+		if($3~/(f|l)/ && fname in names_n){
 
-if($3~/l/){stat(fullpath,statdata);fullpath=path"/"statdata["linkval"]}
+			if($3~/l/){stat(fullpath,statdata);fullpath=path"/"statdata["linkval"]}
 
-IMG_DST=gdImageCreateFromFile(path"/"$2)
-IMG_X=gdImageSX(IMG_DST)
-IMG_Y=gdImageSY(IMG_DST)
-if(IMG_DST && IMG_X==IMG_Y){
+			IMG_DST=gdImageCreateFromFile(path"/"$2)
+			IMG_X=gdImageSX(IMG_DST)
+			IMG_Y=gdImageSY(IMG_DST)
+			if(IMG_DST && IMG_X==IMG_Y){
 
-icons[fname][IMG_X]=gensub(/^\//,"",1,gensub(pwd,"",1,path))"/"$2
-#print "icons["fname"]["IMG_X"]="icons[fname][IMG_X]
-#print "icons["name"]["IMG_X"]=" gensub(/^\//,"",1,gensub(pwd,"",1,path))"/"$2
-#print gensub(/^\//,"",1,gensub(pwd,"",1,path))"/"$2,IMG_X " x " IMG_Y,rel
-gdImageDestroy(IMG_DST)
-}
-}
-}
+				icons[fname][IMG_X]=gensub(/^\//,"",1,gensub(pwd,"",1,path))"/"$2
+				#print "icons["fname"]["IMG_X"]="icons[fname][IMG_X]
+				#print "icons["name"]["IMG_X"]=" gensub(/^\//,"",1,gensub(pwd,"",1,path))"/"$2
+				#print gensub(/^\//,"",1,gensub(pwd,"",1,path))"/"$2,IMG_X " x " IMG_Y,rel
+				gdImageDestroy(IMG_DST)
+			}
+		}
+		}
 
-}
-FS=fs
+	}
+	FS=fs
 
 }
 

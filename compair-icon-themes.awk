@@ -400,6 +400,10 @@ function parsefast(	th_arr,	cmd,	th){ # parse icon themes array
        if(tolower(varval[1])~"size"){size=varval[2];size_a[size]=size;size_fld[abs][$1]=size}
        if(tolower(varval[1])~"type"){type=varval[2];type_a[type]=type;type_fld[abs][$1]=type}
        if(tolower(varval[1])~"scale"){scale=varval[2];scale_a[scale]=scale}
+       #if(!isarray(folder_a[abs])){delete folder_a[abs]}
+       #arraytree(folder_a,"folder_a")
+       #split("",folder_a)
+       #split("",folder_a[abs])
        folder_a[abs][$1]=type # array of theme folders for couting of icon names folder_a["/theme/path/"]["context/48"]="Fixed"
        scalablesize[context][size]=size
        #print "size_type_a["type"]["(tolower(type)~"fixed"?size:256)"]="(tolower(type)~"fixed"?size:256)
@@ -418,11 +422,13 @@ function parsefast(	th_arr,	cmd,	th){ # parse icon themes array
  ORS=orstmp
 }
 
-function allfolderslist(	th_arr,	cnt_arr,	i,	j,	k, abs,	filedata){ # th_arr[1]=/path/to/index.theme => icon_a["/path/to/"]["Context"]["Type"]["Size"]["icon.ext"]="/path/to/|directory|fl|size|fullinkpath"
+function allfolderslist(th_arr, cnt_arr,	i,	j,	k, abs,	filedata){ # th_arr[1]=/path/to/index.theme => icon_a["/path/to/"]["Context"]["Type"]["Size"]["icon.ext"]="/path/to/|directory|fl|size|fullinkpath"
  for(k in cnt_arr){ # context in context array
   for(i in th_arr){ # theme in themes array
    abs=gensub(/index.theme$/,"",1,th_arr[i]) # get absolute path to theme folder
    #parsefast(th_arr[i])
+   if(!isarray(folder_a[abs])){print "Ошибка! Вероятно, пути '" abs "' не существует!";exit -1}
+   
    for(j in folder_a[abs]){ # cycle in folders of this theme file
     if(context_fld[abs][j]==cnt_arr[k]){ # if conext's name of folder equal to chosen context
       # print abs j, folder_a[abs][j], context_fld[abs][j], type_fld[abs][j], size_fld[abs][j]
@@ -456,6 +462,7 @@ function allfolderslist(	th_arr,	cnt_arr,	i,	j,	k, abs,	filedata){ # th_arr[1]=/
 function draw(	th_arr,	cnt_arr,	outfolder,	c,	j,	th,	ty,	s,	outline,	outa){
  for(c in cnt_arr){
   outfile=outfolder?outfolder"/"cnt_arr[c]".html":"/dev/stdout"
+  print "Creating " outfile "..."
   print "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\" />\n<title>" title "</title>\n" > outfile
   print printstyle() >> outfile
   print "</head><body><center>" > outfile
@@ -515,11 +522,15 @@ BEGIN{
  delete ARGV[0]
  if(ARGV[1]){
   asort(ARGV,filearr)
- }else{
-  filearr[3]="/home/joker/Документы/GitHub/Win98SE/Icons/SE98/index.theme"
+ }else{ # Все пути должы быть рабочими!!!!!
+  #filearr[7]="/usr/share/icons/gnome/index.theme"
+  #filearr[6]="/usr/share/icons/oxygen/index.theme"
+  #filearr[5]="/usr/share/icons/HighContrast/index.theme"
+  #filearr[4]="/usr/share/icons/hicolor/index.theme"
+  filearr[3]="/home/joker/Документы/GitHub/Win98SE/SE98/index.theme"
   filearr[2]="/home/joker/Документы/GitHub/Chicago95/Icons/Chicago95/index.theme"
-  filearr[1]="/home/joker/Документы/icons/share-icons/mate/index.theme"
-  filearr[1]="/home/joker/Документы/icons/share-icons/Faenza/index.theme"
+  #filearr[1]="/home/joker/Документы/icons/share-icons/mate/index.theme"
+  #filearr[1]="/home/joker/Документы/icons/share-icons/Faenza/index.theme"
   #arraytree(ARGV,"ARGV")
  }
  contarr[1]="Actions"

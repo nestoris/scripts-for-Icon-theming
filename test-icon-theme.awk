@@ -3,7 +3,20 @@
 @load "readdir"
 @load "filefuncs"
 
-function getres(	fil,ret){
+
+BEGIN{
+ dark="\033[2m"
+ bold="\033[1m"
+ normal="\033[0m"
+ red="\033[31;1m"
+ green="\033[32m"
+ for(thf=1;thf<=ARGC;thf++){
+  chkszsthm(ARGV[thf])
+ }
+ exit;
+}
+
+function getres(fil	,ret){ # отправить разрешение значка в формате "X Y" в вывод функции
  img=gdImageCreateFromFile(fil,"GDFILE_PNG")
  err=ERRNO
  ERRNO=""
@@ -13,22 +26,24 @@ function getres(	fil,ret){
  return ret
 }
 
-function _getres(	fil){
+function _getres(	fil){ # отправить разрешение значка в формате "X Y" в стандартный вывод
  cmd="identify -format '%w' " fil
  while((cmd|getline)>0){return $0}
 }
 
-function readsizes1(	rdir){
+function readsizes1(rdir	,fs){
+ fs=FS
  FS="/"
- while((getline < rdir)>0){
+ while((getline < rdir)>0){ # читаем папку с помощью readdir
   szs=getres(rdir $2) ": "($3=="l"?"\033[2m":"\033[1m") $2 "\033[0m"
   if(szs!~/^-/){
    print szs
   }
  }
+ FS=fs
 }
 
-function checksizes(	root,fldr,size,sza){
+function checksizes(root,fldr	,size,sza){
  fstmp=FS
  FS="/"
  rdir=root fldr "/"
@@ -66,7 +81,7 @@ function getdirs(	theme){
  OFS=ofstmp
 }
 
-function chkszsthm(	thm,i,thmpath){
+function chkszsthm(thm	,i,thmpath){
  stat(thm,statdata)
  thmpath=statdata["name"]
  getdirs(thmpath)
@@ -76,14 +91,3 @@ function chkszsthm(	thm,i,thmpath){
  }
 }
 
-BEGIN{
- dark="\033[2m"
- bold="\033[1m"
- normal="\033[0m"
- red="\033[31;1m"
- green="\033[32m"
- for(thf=1;thf<=ARGC;thf++){
-  chkszsthm(ARGV[thf])
- }
- exit;
-}
