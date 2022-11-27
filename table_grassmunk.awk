@@ -81,12 +81,12 @@ h1, h2 {\n\
   font-weight: bold;\n\
 }\n\
 </style>\n\
-<title>Chicago 95 Icons: stock</title>\n\
-<!-- Part of the Chicago95 project -->\n\
+<title>SE98 Icons: stock</title>\n\
+<!-- Part of the SE98 project -->\n\
 </head>\n\
 <body><h1>SE98 Icons: "capital(fol_nam)"</h1>\n\
 <br><br>\n\
-<center><p style=\"color:white\">Below is the list of all icons using in the <b>"capital(fol_nam)"</b> section. Each icon is identified by its name. Symlinks are ignored.</p></center>\n\
+<center><p style=\"color:white\">Below is the list of all icons using in the <b>"capital(fol_nam)"</b> section. Each icon is identified by its name. <s>Symlinks</s> are ignored.</p></center>\n\
 <br><br>"
 foot="</body></html>"
 }
@@ -120,6 +120,7 @@ print foot
 }
 
 BEGIN{
+pwd=ENVIRON["PWD"] ARGV[1]
 prepare()
 table()
 }
