@@ -86,7 +86,7 @@ h1, h2 {\n\
 </head>\n\
 <body><h1>SE98 Icons: "capital(fol_nam)"</h1>\n\
 <br><br>\n\
-<center><p style=\"color:white\">Below is the list of all icons using in the <b>"capital(fol_nam)"</b> section. Each icon is identified by its name. If the icon is a symlink to another icon it will be followed by the name of the link target.</p></center>\n\
+<center><p style=\"color:white\">Below is the list of all icons using in the <b>"capital(fol_nam)"</b> section. Each icon is identified by its name. Symlinks are ignored.</p></center>\n\
 <br><br>"
 foot="</body></html>"
 }
