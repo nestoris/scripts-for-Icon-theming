@@ -61,11 +61,18 @@ head="<!DOCTYPE html>\n\
 <style>\n\
 td {\n\
   border: 1px solid black;\n\
-  padding: 10px;\n\
+  padding: 6px;\n\
   text-align:center;\n\
   font-size: x-small;\n\
   vertical-align: bottom;\n\
   background: white;\n\
+}\n\
+td.empty {\n\
+  background: #CCDDDD;\n\
+  border: 1px solid #666666;\n\
+}\n\
+td.ln {\n\
+  border: 1px solid #808080;\n\
 }\n\
 table {\n\
   position: relative;\n\
@@ -79,7 +86,7 @@ th {\n\
   position: sticky;\n\
   top: 0;\n\
   border: 1px solid black;\n\
-  padding: 10px;\n\
+  padding: 6px;\n\
   text-align:center;\n\
 }\n\
 \n\
@@ -123,8 +130,8 @@ print "\t<tr>" > fileout
 for(k in dirar){
 #print k"/"ic
 dirnam=k"/"ic
-	imgtag=(existar[dirnam]?"\t\t\t<img src=\"./"dirnam".png\" alt=\""ic".png\">\n\t\t\t<br>"ic".png\n":"")
-	print "\t\t<td><a name="dirnam"></a>\n" imgtag "\n\t\t</td>" > fileout
+	imgtag=(existar[dirnam]?"\t\t<td><a name="dirnam"></a>\n" "\t\t\t<img src=\"./"dirnam".png\" alt=\""ic".png\">\n\t\t\t<br>"ic"\n" "\n\t\t</td>":"\t\t<td class=\"empty\"><a name="dirnam"></a>\n\t\t</td>")
+	print imgtag > fileout
 }
 print "\t</tr>" > fileout
 }
@@ -143,10 +150,13 @@ dirlnam=k"/"icl
 	}else{
 		locallink="#"k"/"locallink
 	}
-	href="<a href=\""locallink"\"><i>"lnarr[icl][k]"</i></a>"
-	imgtag=(isarray(lnarr[icl]) && existlnar[dirlnam]?"\t\t\t<img src=\"./"k"/"icl".png\" alt=\""icl".png\">\n\t\t\t<br>"icl".png<br>"href"<br>\n":"")
+	lnname=lnarr[icl][k];gsub(/\.[^.]*$/,"",lnname)
+	linktext="iconlink "href" "icl
+	linktext=icl "<br>" href
+	href="<a href=\""locallink"\"><i>"lnname"</i></a>"
+	imgtag=(isarray(lnarr[icl]) && existlnar[dirlnam]?"\t\t<td class=\"ln\">\n""\t\t\t<img src=\"./"k"/"icl".png\" alt=\""icl".png\">\n\t\t\t<br>"linktext"<br>\n""\n\t\t</td>":"\t\t<td class=\"empty\">\n"  "\n\t\t</td>")
 	#if(lnarr[icl][k]){
-		print "\t\t<td>\n" imgtag "\n\t\t</td>" > fileout
+		print imgtag > fileout
 	#}
 }
 print "\t</tr>" > fileout
