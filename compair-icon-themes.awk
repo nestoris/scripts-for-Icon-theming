@@ -2,7 +2,7 @@
 @load "readfile"
 @load "readdir"
 @load "filefuncs"
-@include "arraytree.awk"
+#@include "arraytree.awk"
 
 #######################################################################################
 
@@ -522,13 +522,15 @@ BEGIN{
  delete ARGV[0]
  if(ARGV[1]){
   asort(ARGV,filearr)
- }else{ # Все пути должы быть рабочими!!!!!
+ }else{ # Все пути должы быть рабочими!!!!! Compair Chicago95 and SE98.
+  print "Usage:\n\tcompair-icon-themes.awk /usr/share/icons/Adwaita/index.theme /usr/share/icons/Faenza/index.theme"
+  exit # exit after help for now.
   #filearr[7]="/usr/share/icons/gnome/index.theme"
   #filearr[6]="/usr/share/icons/oxygen/index.theme"
   #filearr[5]="/usr/share/icons/HighContrast/index.theme"
   #filearr[4]="/usr/share/icons/hicolor/index.theme"
-  filearr[3]="/home/joker/Документы/GitHub/Win98SE/SE98/index.theme"
-  filearr[2]="/home/joker/Документы/GitHub/Chicago95/Icons/Chicago95/index.theme"
+  filearr[3]="/home/joker/Документы/GitHub/Win98SE/SE98/index.theme" # Compair Chicago95 and SE98.
+  filearr[2]="/home/joker/Документы/GitHub/Chicago95/Icons/Chicago95/index.theme" # Compair Chicago95 and SE98.
   #filearr[1]="/home/joker/Документы/icons/share-icons/mate/index.theme"
   #filearr[1]="/home/joker/Документы/icons/share-icons/Faenza/index.theme"
   #arraytree(ARGV,"ARGV")
