@@ -2,7 +2,7 @@
 @load "rwarray"
 @load "readfile"
 @load "readdir"
-# @load "json"
+@load "json"
 # @include "arraytree"
 #@include "ini"
 
@@ -199,7 +199,7 @@ print icf_data > icf
  }
 
  print "</body></html>" > of
- print "Created " length(array_s) " HTML files in '"path"'."
+ print "Created " length(array_s) " HTML files to a '"path"'."
 }
 
 function find_and_save(){
@@ -222,7 +222,13 @@ imgsize=48 #size of images in each html table
 #print abspath("../../mimetypes/64/message.png","/home/joker/GitHub/Win98SE/SE98/apps/64/")
 
 ## create and save icon array OR read it from bin file (Only ASCII paths! No Unicode!)
-# getthemes("/home/joker/GitHub/Win98SE/SE98|/usr/share/icons",themearray)
+
+
+### For creating list of desired icon names to know about symlinking (many themes get much time)
+while((getline<"themes_with_desired_icon_names")>0){desired_icon_names=(desired_icon_names?desired_icon_names"|"$0:$0)}
+getthemes("desired_icon_names",themearray)
+
+
 writeIconArray("icons.bin")
 #reada("/home/joker/Документы/scripts/GAWK/icons.bin", icons)
 
