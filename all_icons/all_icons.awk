@@ -222,8 +222,8 @@ imgsize=48 #size of images in each html table
 #print abspath("../../mimetypes/64/message.png","/home/joker/GitHub/Win98SE/SE98/apps/64/")
 
 ## create and save icon array OR read it from bin file (Only ASCII paths! No Unicode!)
-getthemes("/home/joker/GitHub/Win98SE/SE98|/usr/share/icons",themearray)
-writeIconArray("/home/joker/Документы/scripts/GAWK/icons.bin")
+# getthemes("/home/joker/GitHub/Win98SE/SE98|/usr/share/icons",themearray)
+writeIconArray("icons.bin")
 #reada("/home/joker/Документы/scripts/GAWK/icons.bin", icons)
 
 ####find_and_save()
