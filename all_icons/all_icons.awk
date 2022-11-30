@@ -2,8 +2,8 @@
 @load "rwarray"
 @load "readfile"
 @load "readdir"
-@load "json"
-@include "arraytree"
+# @load "json"
+# @include "arraytree"
 #@include "ini"
 
 function readinif(file,iniarr,prefix,	rs){	#read ini file and convert it to a 2D gawk array.
