@@ -199,7 +199,7 @@ print icf_data > icf
  }
 
  print "</body></html>" > of
- print "Created " length(array_s) " HTML files."
+ print "Created " length(array_s) " HTML files in '"path"'."
 }
 
 function find_and_save(){
