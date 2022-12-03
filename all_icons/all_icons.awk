@@ -225,8 +225,10 @@ imgsize=48 #size of images in each html table
 
 
 ### For creating list of desired icon names to know about symlinking (many themes get much time)
-while((getline<"themes_with_desired_icon_names")>0){desired_icon_names=(desired_icon_names?desired_icon_names"|"$0:$0)}
-getthemes("desired_icon_names",themearray)
+themes_with_desired_icon_names="themes_with_desired_icon_names"
+while((getline<themes_with_desired_icon_names)>0){$0~"^#"?"":desired_icon_names=(desired_icon_names?desired_icon_names"|":"") $0}
+
+getthemes(desired_icon_names,themearray)
 
 
 writeIconArray("icons.bin")
