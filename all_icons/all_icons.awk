@@ -82,14 +82,17 @@ ipath[6]="/home/joker/Downloads/icons/TEST_ICONS"
 while((getline<"iconpaths")>0){iph++;$0~"^#"?"":ipath[iph]=$0}
 
 for(df in ipath){
-print "Looking for icons in \""ipath[df]"\"..."
+print "Looking for icons in \""ipath[df]"\"...                          "
 #while((cmd[df]|getline)>0){
 cmd[df]="find -H \""ipath[df]"\" -type f,l -regextype awk -regex \".*\\.(png|xpm|svg)\" -printf \"%h|%f|%l\\n\""
+#nr=0
 while((cmd[df]|getline)>0){
 #print gensub(/\.[^.]*$/,"",1,$2) "=" $1 "/" $2
+ #nr++
  noext=gensub(/\.[^.]*$/,"",1,$2) #name of icon w/o extension
  isarray(themearray)&&themearray[$1]["Context"]?icon_contexts[noext][themearray[$1]["Context"]]++:""
  if(isarray(icons[noext])){
+  printf "\r"length(icons) " total unique names found."
   isarray(themearray)&&themearray[$1]["Context"]?icons[noext]["#"][themearray[$1]["Context"]]++:""
   isarray(themearray)&&themearray[$1]["context"]?icons[noext]["#"][themearray[$1]["context"]]++:""
   icons[noext][length(icons[noext])+1]=$1 "/" $2
@@ -106,13 +109,15 @@ while((cmd[df]|getline)>0){
   iconchildren[$3][noext]=noext
  } #creating arrays for symlinked files. iconparents["symlink_name"]["original_target"]
 }
+#printf "\n"
+printf "\r"
 close(cmd[df])
 }
-writea(arrfile, icons)
+#writea(arrfile, icons)
 
-if(isarray(iconparents)){writea(parfile, iconparents)}
-if(isarray(iconchildren)){writea(chilfile, iconchildren)}
-if(isarray(linksa)){writea(linksf, linksa)}
+#if(isarray(iconparents)){writea(parfile, iconparents)}
+#if(isarray(iconchildren)){writea(chilfile, iconchildren)}
+#if(isarray(linksa)){writea(linksf, linksa)}
 }
 
 function build(	json,	htm){
