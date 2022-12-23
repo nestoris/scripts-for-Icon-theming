@@ -18,6 +18,21 @@ function readinif(file,iniarr,prefix,	rs){	#read ini file and convert it to a 2D
 	RS=rs
 }
 
+function doini(arr,sys,	i,	j,	out,	rs){ # Create ini file: arr -- input array, sys -- newline symbol for system (w -- Windows, m -- Mac, any other -- Unix/Linux)
+rs=(sys=="w"?"\r\n":sys=="m"?"\r":"\n")
+	if(isarray(arr)){
+		for(i in arr){
+			if(isarray(arr[i])){
+				out=out (out?"\n\n":"") "["i"]"
+				for(j in arr[i]){
+					out=out "\n"j"="arr[i][j]
+				}
+			}
+		}
+	}
+return out
+}
+
 function abspath(filepath,relto,	out){ # filepath=relative path, relto=absolute path to file or folder (slash at the end of folder is nessusery!); abspath("../../relative/file.ext","/path/to/file.ext") OR abspath("../../relative/file.ext","/path/to/folder/")
 gsub(/[^/]*$/,"",relto)
 out=relto filepath
@@ -223,6 +238,8 @@ reada("/home/joker/Документы/scripts/GAWK/iconlinks.bin", linksa)
 BEGIN{
 FS="|"
 imgsize=48 #size of images in each html table
+parents_out="parents.ini"
+childen_out="children.ini"
 
 #print abspath("../../mimetypes/64/message.png","/home/joker/GitHub/Win98SE/SE98/apps/64/")
 
