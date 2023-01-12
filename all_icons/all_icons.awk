@@ -1,9 +1,7 @@
 #!/usr/bin/gawk -f
-@load "rwarray"
 @load "readfile"
 @load "readdir"
-@load "json"
-# @include "arraytree"
+#@include "arraytree"
 #@include "ini"
 
 function readinif(file,iniarr,prefix,	rs){	#read ini file and convert it to a 2D gawk array.
@@ -34,17 +32,17 @@ return out
 }
 
 function abspath(filepath,relto,	out){ # filepath=relative path, relto=absolute path to file or folder (slash at the end of folder is nessusery!); abspath("../../relative/file.ext","/path/to/file.ext") OR abspath("../../relative/file.ext","/path/to/folder/")
-gsub(/[^/]*$/,"",relto)
-out=relto filepath
-gsub(/\/+/,"/",out)
-#print out
-while(out~/\/\.\//){gsub(/\/\.\//,"/",out)}
-#print out
-while(out~/\/\.\.\//&&out!~/^\/*\..\//){
-gsub(/\/[^/.]*\/\.\./,"",out)
-gsub(/^\/\.\.\//,"../",out)
-}
-return out
+	gsub(/[^/]*$/,"",relto)
+	out=relto filepath
+	gsub(/\/+/,"/",out)
+	#print out
+	while(out~/\/\.\//){gsub(/\/\.\//,"/",out)}
+	#print out
+	while(out~/\/\.\.\//&&out!~/^\/*\..\//){
+		gsub(/\/[^/.]*\/\.\./,"",out)
+		gsub(/^\/\.\.\//,"../",out)
+	}
+	return out
 }
 
 
@@ -71,18 +69,13 @@ if(themeroot){thnum++;readinif(themeroot "/index.theme",arr,themeroot)}else{for(
 FS=fs
 }
 
-function writeIconArray(arrfile,	iph,	ipath){
+function writeIconArray(	iph,	ipath){
 #cmd[1]="find \"/usr/share/icons/\" -type f -regextype awk -regex \".*\\.(svg|png|xpm)\" -printf \"%h|%f\\n\""
 #cmd[2]="find \"/home/joker/.icons/\" -type f -regextype awk -regex \".*\\.(svg|png|xpm)\" -printf \"%h|%f\\n\""
 #cmd[3]="find \"/home/joker/.local/share/icons/\" -type f -regextype awk -regex \".*\\.(svg|png|xpm)\" -printf \"%h|%f\\n\""
 #cmd[4]="find \"/usr/share/pixmaps/\" -type f -regextype awk -regex \".*\\.(svg|png|xpm)\" -printf \"%h|%f\\n\""
 #cmd[5]="find \"/home/joker/GitHub/Win98SE/Icons/SE98/\" -type f -regextype awk -regex \".*\\.(svg|png|xpm)\" -printf \"%h|%f\\n\""
 #cmd[6]="find \"/home/joker/Downloads/icons/TEST_ICONS\" -type f -regextype awk -regex \".*\\.(svg|png|xpm)\" -printf \"%h|%f\\n\""
-
-linksf=parfile=chilfile=arrfile
-gsub(/\/[^/.]*\./,"/iconparents.",parfile)
-gsub(/\/[^/.]*\./,"/iconchildren.",chilfile)
-gsub(/\/[^/.]*\./,"/iconlinks.",linksf)
 
 
 if(1==3){ # ignoring block
@@ -99,9 +92,10 @@ while((getline<"iconpaths")>0){iph++;$0~"^#"?"":ipath[iph]=$0}
 for(df in ipath){
 print "Looking for icons in \""ipath[df]"\"...                          "
 #while((cmd[df]|getline)>0){
-cmd[df]="find -H \""ipath[df]"\" -type f,l -regextype awk -regex \".*\\.(png|xpm|svg)\" -printf \"%h|%f|%l\\n\""
+cmd[df]="find -H \""ipath[df]"\" -type f,l -regextype awk -regex \".*\\.(png|xpm|svg|theme)\" -printf \"%h|%f|%l\\n\""
 #nr=0
 while((cmd[df]|getline)>0){
+if($2!~/index\.theme$/){
 #print gensub(/\.[^.]*$/,"",1,$2) "=" $1 "/" $2
  #nr++
  noext=gensub(/\.[^.]*$/,"",1,$2) #name of icon w/o extension
@@ -116,61 +110,55 @@ while((cmd[df]|getline)>0){
   delete icons[noext]
   icons[noext]["1"]=$1 "/" $2
  }
- if($3){
+ if($3){ #creating arrays for symlinked files. iconparents["symlink_name"]["original_target"]
 #  linksa[$1 "/" $2]=abspath($3,$1 "/")
   linksa[$1 "/" $2]=$3
   gsub(/.*\/|\.[^.]*$/,"",$3)
   if(length($3)>4){iconparents[noext][$3]=$3}
   iconchildren[$3][noext]=noext
- } #creating arrays for symlinked files. iconparents["symlink_name"]["original_target"]
+  symlinked_icons[ipath[df]][gensub(/\.[^.]*$/,"",1,$2)]
+ }else{
+  #originals_count[ipath[df]][gensub(/\.[^.]*$/,"",1,$2)]
+  original_icons[curr_thm][noext]
+  icons_neverlinked[noext]
+ }
+}else{
+curr_thm=$1
+}
 }
 #printf "\n"
 printf "\r"
 close(cmd[df])
+for(tmp_i in symlinked_icons[ipath[df]]){
+#for(curr_thm in original_icons){
+#delete original_icons[curr_thm][tmp_i]
+#}
+delete icons_neverlinked[tmp_i]
 }
-#writea(arrfile, icons)
-
-#if(isarray(iconparents)){writea(parfile, iconparents)}
-#if(isarray(iconchildren)){writea(chilfile, iconchildren)}
-#if(isarray(linksa)){writea(linksf, linksa)}
 }
-
-function build(	json,	htm){
-
-htm=htm "\n\
-<!DOCTYPE html>\n\
-<html>\n\
-<head><meta charset=\"utf-8\" /><title>HTML5</title></head>\n\
-<body>\n\
-<label for=\"iconcombo\">Choose your iconcombo from the list:</label>\n\
-<input list=\"iconnames\" name=\"iconcombo\" id=\"iconcombo\">\n\
-<datalist id=\"iconnames\">\n\
-</datalist>\n\
-<select name=\"thelist\" id=\"iconcomboclose\" onchange=\"combo(this, 'iconcombo')\">\n\
-</select> \n\
-<div id=\"output\">\n\
-</div><br>\n\
-</body>\n"
-
-htm=htm "\n<script lnguage=\"JavaScript\" type=\"text/javascript\">"
-htm=htm "\nfunction combo(thelist, iconcombo){theinput = document.getElementById(\"theinput\"); var idx = thelist.selectedIndex; var content = thelist.options[idx].innerHTML;document.all.iconcombo.value = content};"
-htm=htm "\nconst icon = " json ";"
-htm=htm "\nfor(var i in icon){document.all.iconnames.innerHTML+='<option value=\"'+i+'\">';document.all.iconcomboclose.innerHTML+='<option>'+i+'</option>'};"
-htm=htm "\ndocument.all.iconcombo.addEventListener(\"input\", function(event){if(event.inputType == \"insertReplacementText\" || event.inputType == null){icontable=event.target.value+'<br>';icontable+='<table border="1">';for(var i in eval('icon[\"'+event.target.value+'\"]')){icontable+='<tr><td><img src=\"'+eval('icon[\"'+event.target.value+'\"]['+i+']')+'\"></td><td>'+eval('icon[\"'+event.target.value+'\"]['+i+']')+'</td></tr>'};icontable+='</table>';document.all.iconcombo.textContent=event.target.value};document.all.output.innerHTML=icontable});"
-htm=htm "\ndocument.all.iconcomboclose.addEventListener(\"input\", function(event){var icontable=event.target.value+'<br>';icontable+='<table border=\"1\">';for(var i in eval('icon[\"'+event.target.value+'\"]')){icontable+='<tr><td><img src=\"'+eval('icon[\"'+event.target.value+'\"]['+i+']')+'\"></td><td>'+eval('icon[\"'+event.target.value+'\"]['+i+']')+'</td></tr>'};icontable+='</table>';document.all.output.innerHTML=icontable});"
-htm=htm "\n</script>"
-htm=htm "\n</html>"
-
-return htm
 }
 
-function papki(	array,	path,	i,	j,	cntx){ #create folder with html-files and main index.html page with counts
- #path=path?path:"/home/joker/Документы/scripts/GAWK/all_icons/all"
- path=path?path:"/tmp/all_icons"
- of=path "/index.html" ### OUTPUT FILE === вывод файла
- markdown=path "/index.md"
- system("mkdir -p " path "/icons")
+function sortrating(iniin,rating){
+readinif(iniin,arr)
+for(i in arr["Count"]){
+zeros=""
+for(k=6;k>length(arr["Count"][i]);k--){
+zeros=zeros "0"
+}
+j++;arr1[j]=zeros arr["Count"][i]"_"i
+}
+asort(arr1)
+#arraytree(arr1,"arr1")
+for(k=length(arr1);k>0;k--){
+split(arr1[k],a,"_")
+count=themepath=arr1[k]
+gsub(/^[^_]*_/,"",themepath)
+gsub(/_.*$/,"",count)
+print themepath " ("count*1")" > rating
+}
+}
 
+function papki(	array,	i,	j,	cntx){ #create folder with html-files and main index.html page with counts
  ## измеряем максимальое количество вариантов значка
  maxicvars=0
  for(i in array){
@@ -226,13 +214,6 @@ function find_and_save(){
 writeIconArray("/home/joker/Документы/scripts/GAWK/icons.bin")
 }
 
-function load_saved(){
-reada("/home/joker/Документы/scripts/GAWK/icons.bin", icons)
-reada("/home/joker/Документы/scripts/GAWK/iconparents.bin", iconparents)
-reada("/home/joker/Документы/scripts/GAWK/iconchildren.bin", iconchildren)
-reada("/home/joker/Документы/scripts/GAWK/iconlinks.bin", linksa)
-
-}
 
 
 BEGIN{
@@ -252,35 +233,44 @@ while((getline<themes_with_desired_icon_names)>0){$0~"^#"?"":desired_icon_names=
 
 getthemes(desired_icon_names,themearray)
 
+ #path=path?path:"/home/joker/Документы/scripts/GAWK/all_icons/all"
+ path=path?path:"/tmp/all_icons"
+ of=path "/index.html" ### OUTPUT FILE === вывод файла
+ markdown=path "/index.md"
+ statistic=path "/stat.ini"
+ mkdirs="mkdir -p " path "/icons"
+ system(mkdirs)
+ close(mkdirs)
+ rating=path "/orig_rating.txt"
 
-writeIconArray("icons.bin")
+
+writeIconArray()
+#arraytree(original_icons,"original_icons")
+#arraytree(icons_neverlinked,"icons_neverlinked")
+#arraytree(symlinked_icons,"symlinked_icons")
+#arraytree(,"")
+origstr="[Count of originals in each theme]"
+for(tmp_i in original_icons){origstr=origstr (origstr?"\n":"") tmp_i"="length(original_icons[tmp_i])}
+origstr=origstr "\n\n[Never linked originals]"
+asorti(icons_neverlinked,icons_neverlinked_s)
+for(tmp_i in icons_neverlinked_s){origstr=origstr (origstr?"\n":"") icons_neverlinked_s[tmp_i]}
+print origstr > statistic
+close(statistic)
+
+
 #reada("/home/joker/Документы/scripts/GAWK/icons.bin", icons)
 
-####find_and_save()
-#load_saved()
-
-## garbage
-#reada("/home/joker/Документы/scripts/GAWK/all_icons/icons.bin", icons)
-#print json::to_json(icons) > "pixmaps.json"
-
-## saving array of icons to json
-#print json::to_json(icons) > "/home/joker/Документы/scripts/GAWK/all_icons/icons.json"
-
-## garbage
-#json::from_json(readfile("/home/joker/Документы/scripts/GAWK/all_icons/icons.json"),icons)
-#arraytree(icons,"icons")
-#json=json::to_json(icons)
 
 #papki(icons,"/home/joker/Документы/GitHub/all_icons")
 
 papki(icons)
+printf "Creating rating of how many originals are in theme..."
+sortrating(statistic,rating)
+print " " rating " Done!"
+
 #getthemes("/home/joker/GitHub/Win98SE/SE98|/usr/share/icons",themearray)
 #arraytree(themearray,"themearray")
 #arraytree(themearray,"themearray")
 #arraytree(linksa,"linksa")
 #arraytree(icons,"icons")
-
-## garbage
-#print build(json)
-#print json | "jq . "
 }
