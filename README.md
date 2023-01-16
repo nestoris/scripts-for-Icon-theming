@@ -1,5 +1,9 @@
 # Scripts for icon themers
 
+## [All Icons](all_icons/all_icons.awk)
+**[ru] Скрипт для поиска всех имеющихся значков во всех имеющихся темах, создания каталога в виде HTML и MarkDown<br>**
+The icon finding script that plows through all the directories offered to him and finds all possible icons, which he presents in the form of an HTML catalog and a MarkDown list.
+
 ## [Compair icon themes](compair-icon-themes.awk)
 **[ru] Новый скрипт для сравнения тем значков в виде HTML**<br>
 [Screenshots of workflow (CLI and GUI)](screenshots_cit/README.md)<br>
