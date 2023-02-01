@@ -249,7 +249,9 @@ writeIconArray()
 #arraytree(icons_neverlinked,"icons_neverlinked")
 #arraytree(symlinked_icons,"symlinked_icons")
 #arraytree(,"")
-origstr="[Count of originals in each theme]"
+count_sec="Count of originals in each theme"
+
+origstr="["count_sec"]"
 for(tmp_i in original_icons){origstr=origstr (origstr?"\n":"") tmp_i"="length(original_icons[tmp_i])}
 origstr=origstr "\n\n[Never linked originals]"
 asorti(icons_neverlinked,icons_neverlinked_s)

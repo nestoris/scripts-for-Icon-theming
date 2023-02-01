@@ -2,7 +2,7 @@
 @load "gd"
 @load "readdir"
 @load "filefuncs"
-
+#@include "arraytree"
 
 BEGIN{
  dark="\033[2m"
@@ -10,6 +10,34 @@ BEGIN{
  normal="\033[0m"
  red="\033[31;1m"
  green="\033[32m"
+ themedir="/home/joker/Документы/GitHub/Win98SE/SE98"
+ chk_dir="actions/22"
+ dir_size=22
+ main2(themedir,chk_dir,dir_size,dir_chk_siz_a)
+}
+
+function checksizes(themedir,chk_dir,dir_size,dir_chk_siz_a,	i,j,img,imgW,imgH,data,flags){ # проверка размеров на несоответствие. аргументы: путь к теме, относительный путь папки, размер папки, желаемый массив с ошибочными файлами
+	pathlist["1"]=themedir "/" chk_dir
+	gsub(/\/+/,"/",pathlist["1"])
+	flags = or(FTS_LOGICAL, FTS_COMFOLLOW)
+	fts(pathlist, flags, data)
+	for(i in data){
+		for(j in data[i]){
+			if(j~/\.png$/){
+			 img=gdImageCreateFromFile(data[i][j]["path"],"GDFILE_PNG")
+			 err=ERRNO
+			 ERRNO=""
+			 imgW=gdImageSX(img)
+			 imgH=gdImageSY(img)
+			 if(imgW!=dir_size||imgH!=dir_size){dir_chk_siz_a[j]=imgW"x"imgH}
+			 ERRNO=""
+			 gdImageDestroy(img)
+			}
+		}
+	}
+}
+
+function main1(){
  for(thf=1;thf<=ARGC;thf++){
   chkszsthm(ARGV[thf])
  }
