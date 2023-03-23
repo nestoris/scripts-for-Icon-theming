@@ -164,7 +164,7 @@ iconoext=gensub(/\.[^.]*$/,"",1,all_iconar_s[ic])
 iconline_md="|**" iconoext "**|"
 for(k in sizes_md_a){
 #iconline_md= iconline_md  (ic && existlnar[sizes_md_a[k]"/"ic] ? "<details><summary>":"") "!["sizes_md_a[k]"]("sizes_md_a[k]"/"ic"." (tolower(sizes_md_a[k])~"scal"?"sv":"pn")"g)"  (ic && existlnar[sizes_md_a[k]"/"ic] ? "</summary> *" lnarr[ic][sizes_md_a[k]] "*</details>" : "") "|"
-iconline_md= iconline_md "![""](" (all_iconar_s[ic] && existlnar[sizes_md_a[k]"/" iconoext] ?  sizes_md_a[k]"/"lnarr[iconoext][sizes_md_a[k]] ")<details><summary>*link*</summary>*" lnarr[iconoext][sizes_md_a[k]] "*</details>" : sizes_md_a[k]"/"all_iconar_s[ic] ")") "|"
+iconline_md= iconline_md "![""](" (all_iconar_s[ic] && existlnar[sizes_md_a[k]"/" iconoext] ?  sizes_md_a[k]"/"lnarr[iconoext][sizes_md_a[k]] ")<details><summary>*link:* </summary>*" lnarr[iconoext][sizes_md_a[k]] "*</details>" : sizes_md_a[k]"/"all_iconar_s[ic] ")") "|"
 }
 icontable_md=icontable_md (icontable_md?"\n":"") iconline_md
 #print iconline_md
@@ -177,7 +177,7 @@ mdout="/dev/null"
 
 if(mdbrief){
 readsizes_md(sizes_brief,sizes_brief_a,sizes_brief_u_a)
-brief_head_md="# "capital(fol_nam) "\nOnly the main icons are shown here (without symlinked duplicates, in sizes from "min_s"x"min_s" to "max_s"x"max_s").<br>The full icon list "(isarray(mdout_minmax)?"with sizes "mdout_minmax[1]"x"mdout_minmax[1]" to "mdout_minmax[2]"x"mdout_minmax[2]:"")" is there: ["mdout"]("mdout")\n"
+brief_head_md="# "capital(fol_nam) "\nOnly the main icons are shown here (without symlinked duplicates, in sizes from "min_s"x"min_s" to "max_s"x"max_s").<br>The full icon list "(isarray(mdout_minmax)?"with sizes from "mdout_minmax[1]"x"mdout_minmax[1]" to "mdout_minmax[2]"x"mdout_minmax[2]:"")" is there: ["mdout"]("mdout")\n"
 md_th="| |"
 md_line="|-|"
 for(k in sizes_brief_a){ # пробегаем по размерам, указанным в sizes_brief в том порядке, как там перечислено
