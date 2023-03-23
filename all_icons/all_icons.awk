@@ -182,7 +182,7 @@ function papki(	array,	i,	j,	cntx){ #create folder with html-files and main inde
   }
 
 #  print "<html>\n<head>\n<title>"array_s[i]"</title>\n<style>\n"css"\n</style></head>\n<body>\n<table border=\"1\">" > icf
-icf_data="<html>\n<head>\n<title>"array_s[i]"</title>\n<style>\n"css"\n</style></head>\n<body>\n<table border=\"1\">"
+icf_data="<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n<title>"array_s[i]"</title>\n<style>\n"css"\n</style></head>\n<body>\n<table border=\"1\">"
   zhar=int(length(array[array_s[i]])/maxicvars*256)-1
   print "Saving (" int(i/length(array_s)*100) "%) "array_s[i] ".html"
   for(a in array[array_s[i]]){
