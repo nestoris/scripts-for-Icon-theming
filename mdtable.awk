@@ -1,7 +1,8 @@
 #!/usr/bin/gawk -f
 
 ## Requirements:
-## gawk gawk-gd
+## gawk <= 5.2.1 (5.2.2 has an error with reading files while the "readdir" module is loaded)
+## gawk-gd
 
 ## Arch/Manjaro:
 # pacman -S gawk
